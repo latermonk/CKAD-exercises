@@ -49,7 +49,7 @@ status: {}
 ```
 
 ```bash
-kubectl create -f pod.yaml
+kubectl create -f pod.yaml -n mynamespace
 ```
 
 </p>
@@ -78,26 +78,29 @@ kubectl logs busybox
 
 ```bash
 # create a  YAML template with this command
-kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml > envpod.yaml
-# edit it
-vi envpod.yaml
+kubectl run busybox --image=busybox --restart=Never --dry-run -o yaml --command  -- env > envpod.yaml
+# see it
+cat envpod.yaml
 ```
 
 ```YAML
 apiVersion: v1
 kind: Pod
 metadata:
+  creationTimestamp: null
   labels:
     run: busybox
   name: busybox
 spec:
   containers:
-  - image: busybox
-    imagePullPolicy: IfNotPresent
+  - command:
+    - env
+    image: busybox
     name: busybox
-    command: ["env"] # <----- add this
+    resources: {}
   dnsPolicy: ClusterFirst
   restartPolicy: Never
+status: {}
 ```
 
 ```bash
@@ -286,11 +289,11 @@ kubectl run nginx --image=nginx --restart=Never --env=var1=val1
 # then
 kubectl exec -it nginx -- env
 # or
-kubectl describe nginx | grep val1
+kubectl describe po nginx | grep val1
 
 # or
 
-kubectl run po busybox --restart=Never --image=busybox --env=var1=val1 -it --rm -- env
+kubectl run nginx --restart=Never --image=nginx --env=var1=val1 -it --rm -- env
 ```
 
 </p>

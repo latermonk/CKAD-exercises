@@ -3,7 +3,7 @@
 
 ## Define volumes 
 
-### Create busybox pod with two containers, each one will have the image busybox and will run the 'sleep 3600' command. Make both pods mount an emptyDir at '/etc/foo'. Connect to the second busybox, write the first column of '/etc/passwd' file to '/etc/foo/passwd'. Connect to the first busybox and write '/etc/foo/passwd' file to standard output. Delete pod.
+### Create busybox pod with two containers, each one will have the image busybox and will run the 'sleep 3600' command. Make both containers mount an emptyDir at '/etc/foo'. Connect to the second busybox, write the first column of '/etc/passwd' file to '/etc/foo/passwd'. Connect to the first busybox and write '/etc/foo/passwd' file to standard output. Delete pod.
 
 <details><summary>show</summary>
 <p>
@@ -81,7 +81,7 @@ kubectl delete po busybox
 </details>
 
 
-### Create a PersistentVolume of 20GB, called 'myvolume'. Make it have accessMode of 'ReadWriteOnce' and 'ReadWriteMany', storageClassName 'normal', mounted on hostPath '/etc/foo'. Save it on pv.yaml, add it to the cluster. Show the PersistentVolumes that exist on the cluster 
+### Create a PersistentVolume of 10Gi, called 'myvolume'. Make it have accessMode of 'ReadWriteOnce' and 'ReadWriteMany', storageClassName 'normal', mounted on hostPath '/etc/foo'. Save it on pv.yaml, add it to the cluster. Show the PersistentVolumes that exist on the cluster
 
 <details><summary>show</summary>
 <p>
@@ -117,7 +117,7 @@ kubectl get pv
 </p>
 </details>
 
-### Create a PersistentVolumeClaim for this storage class, called mypvc, a request of 4GB and save it on pvc.yaml. Create it on the cluster. Show the PersistentVolumeClaims of the cluster. Show the PersistentVolumes of the cluster
+### Create a PersistentVolumeClaim for this storage class, called mypvc, a request of 4Gi and an accessMode of ReadWriteOnce and save it on pvc.yaml. Create it on the cluster. Show the PersistentVolumeClaims of the cluster. Show the PersistentVolumes of the cluster
 
 <details><summary>show</summary>
 <p>
@@ -138,6 +138,12 @@ spec:
   resources:
     requests:
       storage: 4Gi
+```
+
+Create it on the cluster:
+
+```bash
+kubectl create -f pvc.yaml
 ```
 
 Show the PersistentVolumeClaims and PersistentVolumes:
